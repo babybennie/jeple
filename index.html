@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คิวก๋วยจั๊บ</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#fff4e6;
+  color:#211b16;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+}
+
+.container{
+  max-width:800px;
+  margin:auto;
+  padding:15px;
+  padding-bottom:110px;
+}
+
+/* HEADER */
+.header{
+  background:#d9361e;
+  color:white;
+  border-radius:22px;
+  padding:18px;
+  text-align:center;
+  margin-bottom:15px;
+  box-shadow:0 5px 15px #0002;
+}
+
+.header h1{
+  margin:0;
+  font-size:32px;
+  font-weight:900;
+}
+
+.header p{
+  margin:5px 0 0;
+  font-size:17px;
+}
+
+/* CARD */
+.card{
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 3px 12px #00000012;
+}
+
+.title{
+  font-size:21px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+/* QUEUE */
+.queue-box{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#211b16;
+  color:white;
+  padding:14px 18px;
+  border-radius:17px;
+  margin-bottom:15px;
+}
+
+.queue-number{
+  font-size:32px;
+  font-weight:900;
+}
+
+.queue-label{
+  font-size:14px;
+  opacity:.8;
+}
+
+/* QTY */
+.qty{
+  display:grid;
+  grid-template-columns:1fr 100px 1fr;
+  gap:10px;
+}
+
+.qty button{
+  height:65px;
+  border:0;
+  border-radius:16px;
+  background:#eee5dc;
+  font-size:38px;
+  font-weight:900;
+}
+
+.qty-number{
+  height:65px;
+  background:#211b16;
+  color:white;
+  border-radius:16px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:30px;
+  font-weight:900;
+}
+
+/* OPTIONS */
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.option{
+  min-height:65px;
+  border:3px solid #eaded4;
+  background:white;
+  border-radius:16px;
+  font-size:19px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.option.active{
+  background:#ffe0d8;
+  border-color:#d9361e;
+  color:#c5220e;
+}
+
+.option.none{
+  background:#eee9e5;
+}
+
+.option.none.active{
+  background:#211b16;
+  color:white;
+  border-color:#211b16;
+}
+
+/* ADD BUTTON */
+.add{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  background:#16834b;
+  color:white;
+  padding:18px;
+  font-size:23px;
+  font-weight:900;
+  cursor:pointer;
+  margin-top:5px;
+}
+
+.add:active,
+button:active{
+  transform:scale(.98);
+}
+
+/* CURRENT QUEUE */
+.current{
+  background:#fff0cf;
+  border:3px solid #f0b429;
+  border-radius:18px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.current strong{
+  font-size:19px;
+}
+
+/* QUEUE LIST */
+.queue-card{
+  border:3px solid #ddd0c6;
+  border-radius:20px;
+  padding:15px;
+  margin-bottom:12px;
+  background:white;
+}
+
+.queue-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.queue-head .big{
+  font-size:27px;
+  font-weight:900;
+}
+
+.queue-status{
+  background:#d9361e;
+  color:white;
+  border-radius:999px;
+  padding:7px 12px;
+  font-weight:900;
+}
+
+.item{
+  background:#faf5ef;
+  border-radius:13px;
+  padding:11px;
+  margin:7px 0;
+  font-size:16px;
+}
+
+.item b{
+  font-size:19px;
+}
+
+.done{
+  width:100%;
+  border:0;
+  background:#16834b;
+  color:white;
+  padding:14px;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:900;
+  margin-top:8px;
+}
+
+.empty{
+  text-align:center;
+  color:#8b7c70;
+  padding:20px;
+}
+
+/* BOTTOM */
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  padding:10px 15px;
+  box-shadow:0 -5px 20px #0002;
+}
+
+.bottom-inner{
+  max-width:800px;
+  margin:auto;
+  display:flex;
+  gap:10px;
+}
+
+.next{
+  flex:1;
+  border:0;
+  border-radius:15px;
+  background:#d9361e;
+  color:white;
+  padding:15px;
+  font-size:20px;
+  font-weight:900;
+}
+
+.clear{
+  border:0;
+  border-radius:15px;
+  background:#eee5dc;
+  padding:15px;
+  font-size:18px;
+  font-weight:900;
+}
+
+@media(max-width:500px){
+  .header h1{
+    font-size:28px;
+  }
+
+  .option{
+    font-size:17px;
+  }
+
+  .qty{
+    grid-template-columns:1fr 80px 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>🥣 คิวก๋วยจั๊บ</h1>
+    <p>กดออเดอร์เร็ว ไม่ต้องใช้กระดาษ</p>
+  </div>
+
+  <!-- คิวปัจจุบัน -->
+  <div class="queue-box">
+    <div>
+      <div class="queue-label">คิวถัดไป</div>
+      <div class="queue-number" id="nextQueue">1</div>
+    </div>
+
+    <div>
+      <div class="queue-label">กำลังจด</div>
+      <div style="font-size:20px;font-weight:900;">
+        <span id="itemCount">0</span> รายการ
+      </div>
+    </div>
+  </div>
+
+
+  <!-- จำนวน -->
+  <div class="card">
+
+    <div class="title">
+      1️⃣ จำนวน
+    </div>
+
+    <div class="qty">
+
+      <button onclick="changeQty(-1)">
+        −
+      </button>
+
+      <div class="qty-number" id="qty">
+        1
+      </div>
+
+      <button onclick="changeQty(1)">
+        +
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- เส้น -->
+  <div class="card">
+
+    <div class="title">
+      2️⃣ เลือกเส้น
+    </div>
+
+    <div class="options">
+
+      <button
+        class="option noodle active"
+        onclick="selectNoodle(this,'เส้นก๋วยจั๊บ')">
+        🍜 เส้นก๋วยจั๊บ
+      </button>
+
+      <button
+        class="option noodle"
+        onclick="selectNoodle(this,'เส้นหมี่ขาว')">
+        🍜 เส้นหมี่ขาว
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- เครื่อง -->
+  <div class="card">
+
+    <div class="title">
+      3️⃣ เครื่องที่ไม่ใส่
+    </div>
+
+    <div class="options">
+
+      <button class="option none" data-value="ไม่ใส่"
+        onclick="toggleOption(this)">
+        🚫 ไม่ใส่
+      </button>
+
+      <button class="option" data-value="เห็ดหอม"
+        onclick="toggleOption(this)">
+        เห็ดหอม
+      </button>
+
+      <button class="option" data-value="เห็ดขาว"
+        onclick="toggleOption(this)">
+        เห็ดขาว
+      </button>
+
+      <button class="option" data-value="เต้าหู้"
+        onclick="toggleOption(this)">
+        เต้าหู้
+      </button>
+
+      <button class="option" data-value="หมูแดง"
+        onclick="toggleOption(this)">
+        หมูแดง
+      </button>
+
+      <button class="option" data-value="ไส้เจ"
+        onclick="toggleOption(this)">
+        ไส้เจ
+      </button>
+
+      <button class="option" data-value="หมูแผ่น"
+        onclick="toggleOption(this)">
+        หมูแผ่น
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- เพิ่มรายการ -->
+  <button class="add" onclick="addItem()">
+    ＋ เพิ่มรายการคิวนี้
+  </button>
+
+
+  <!-- รายการที่กำลังจด -->
+  <div id="currentBox"></div>
+
+
+  <!-- คิวทั้งหมด -->
+  <div class="card">
+
+    <div class="title">
+      📋 คิวที่รอทำ
+    </div>
+
+    <div id="queueList">
+      <div class="empty">
+        ยังไม่มีคิว
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- BOTTOM -->
+<div class="bottom">
+
+  <div class="bottom-inner">
+
+    <button class="clear" onclick="clearAll()">
+      ล้าง
+    </button>
+
+    <button class="next" onclick="finishQueue()">
+      ✓ ปิดคิว / ขึ้นคิวถัดไป
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let qty = 1;
+
+let noodle = "เส้นก๋วยจั๊บ";
+
+let currentItems = [];
+
+let queues = [];
+
+let queueNumber = 1;
+
+
+/* จำนวน */
+
+function changeQty(number){
+
+  qty += number;
+
+  if(qty < 1){
+    qty = 1;
+  }
+
+  if(qty > 99){
+    qty = 99;
+  }
+
+  document.getElementById("qty").innerText = qty;
+
+}
+
+
+/* เลือกเส้น */
+
+function selectNoodle(button,value){
+
+  noodle = value;
+
+  document
+    .querySelectorAll(".noodle")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+
+}
+
+
+/* เลือกเครื่อง */
+
+function toggleOption(button){
+
+  const value = button.dataset.value;
+
+  if(value === "ไม่ใส่"){
+
+    document
+      .querySelectorAll(".option[data-value]")
+      .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+    return;
+  }
+
+
+  document
+    .querySelector(".option[data-value='ไม่ใส่']")
+    .classList.remove("active");
+
+  button.classList.toggle("active");
+
+}
+
+
+/* เพิ่มรายการ */
+
+function addItem(){
+
+  const selected =
+    [...document.querySelectorAll(".option[data-value].active")]
+      .map(button => button.dataset.value);
+
+
+  currentItems.push({
+
+    qty: qty,
+
+    noodle: noodle,
+
+    no: selected
+
+  });
+
+
+  renderCurrent();
+
+
+  /* รีเซ็ตจำนวน */
+
+  qty = 1;
+
+  document.getElementById("qty").innerText = "1";
+
+
+  /* รีเซ็ตเครื่อง */
+
+  document
+    .querySelectorAll(".option[data-value]")
+    .forEach(btn => btn.classList.remove("active"));
+
+}
+
+
+/* แสดงรายการคิวปัจจุบัน */
+
+function renderCurrent(){
+
+  const box = document.getElementById("currentBox");
+
+  if(currentItems.length === 0){
+
+    box.innerHTML = "";
+
+    document.getElementById("itemCount").innerText = "0";
+
+    return;
+
+  }
+
+
+  let html = `
+    <div class="current">
+
+      <strong>
+        🧾 รายการในคิว ${queueNumber}
+      </strong>
+  `;
+
+
+  currentItems.forEach((item,index)=>{
+
+    let noText =
+      item.no.length
+      ? "ไม่ใส่ " + item.no.join(", ")
+      : "ใส่ครบ";
+
+    html += `
+
+      <div class="item">
+
+        <b>
+          ${item.qty} ถัง
+        </b>
+
+        · ${item.noodle}
+
+        <br>
+
+        <span>
+          ${noText}
+        </span>
+
+      </div>
+
+    `;
+
+  });
+
+
+  html += `</div>`;
+
+  box.innerHTML = html;
+
+  document.getElementById("itemCount").innerText =
+    currentItems.length;
+
+}
+
+
+/* ปิดคิว */
+
+function finishQueue(){
+
+  if(currentItems.length === 0){
+
+    alert("ยังไม่ได้เพิ่มรายการ");
+
+    return;
+
+  }
+
+
+  queues.push({
+
+    number: queueNumber,
+
+    items: [...currentItems]
+
+  });
+
+
+  queueNumber++;
+
+  currentItems = [];
+
+
+  document.getElementById("nextQueue").innerText =
+    queueNumber;
+
+
+  renderCurrent();
+
+  renderQueues();
+
+}
+
+
+/* แสดงคิว */
+
+function renderQueues(){
+
+  const box =
+    document.getElementById("queueList");
+
+
+  if(queues.length === 0){
+
+    box.innerHTML =
+      '<div class="empty">ยังไม่มีคิว</div>';
+
+    return;
+
+  }
+
+
+  let html = "";
+
+
+  queues.forEach((queue,index)=>{
+
+    html += `
+
+      <div class="queue-card">
+
+        <div class="queue-head">
+
+          <div class="big">
+            คิว ${queue.number}
+          </div>
+
+          <div class="queue-status">
+            รอทำ
+          </div>
+
+        </div>
+
+    `;
+
+
+    queue.items.forEach(item=>{
+
+      let noText =
+        item.no.length
+        ? "ไม่ใส่: " + item.no.join(", ")
+        : "ใส่ครบ";
+
+
+      html += `
+
+        <div class="item">
+
+          <b>
+            ${item.qty} ถัง
+          </b>
+
+          · ${item.noodle}
+
+          <br>
+
+          ${noText}
+
+        </div>
+
+      `;
+
+    });
+
+
+    html += `
+
+        <button
+          class="done"
+          onclick="doneQueue(${index})">
+
+          ✓ ทำคิวนี้เสร็จแล้ว
+
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+
+  box.innerHTML = html;
+
+}
+
+
+/* ทำคิวเสร็จ */
+
+function doneQueue(index){
+
+  queues.splice(index,1);
+
+  renderQueues();
+
+}
+
+
+/* ล้างทั้งหมด */
+
+function clearAll(){
+
+  if(confirm("ล้างคิวทั้งหมดใช่ไหม?")){
+
+    queues = [];
+
+    currentItems = [];
+
+    queueNumber = 1;
+
+    document.getElementById("nextQueue").innerText = "1";
+
+    renderCurrent();
+
+    renderQueues();
+
+  }
+
+}
+
+
+/* เริ่ม */
+
+renderQueues();
+
+</script>
+
+</body>
+</html>
